@@ -1,0 +1,16 @@
+# Jalankan: docker compose up --build
+# Isi dulu backend/.env dan variabel NEXT_PUBLIC_* di file .env di root proyek ini.
+services:
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    ports: ["8000:8000"]
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports: ["3000:3000"]
+    depends_on: [backend]
